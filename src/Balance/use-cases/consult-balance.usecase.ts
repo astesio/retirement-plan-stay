@@ -1,7 +1,7 @@
 import { Either, left, right } from '../../core/either';
 import { Usecase } from '../../core/usecase.interface';
 import { EmptyBalanceError } from '../../domain/errors/empty-balance.error';
-import { Balance } from '../../domain/value-objects/balance';
+import { Balance } from '../../domain/value-objects/balance.vo';
 import { IContributionRepository } from '../../infra/persistence/ports/contribution-repository.interface';
 import { BalanceCalculator } from '../services/balance-calculator';
 

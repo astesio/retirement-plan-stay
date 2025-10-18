@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { Injectable } from '@nestjs/common';
 import { IContributionRepository } from '../ports/contribution-repository.interface';
-import { Contribution } from '../../../domain/entities/contribution';
-import { Redemption } from '../../../Redemption/redemption.entity';
+import { Contribution } from '../../../domain/entities/contribution.entity';
+import { Redemption } from '../../../Redemption/entity/redemption.entity';
 
 const MOCKED_CONTRIBUTIONS: Contribution[] = [
   Contribution.create(

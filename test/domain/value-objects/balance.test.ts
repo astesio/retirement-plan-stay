@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { Balance } from '../../../src/domain/value-objects/balance';
+import { Balance } from '../../../src/domain/value-objects/balance.vo';
 
 void describe('Balance Class (Value Object)', () => {
   const totalValue = 1500.75;

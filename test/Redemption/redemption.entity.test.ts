@@ -4,7 +4,7 @@ import { afterEach, describe, it, mock } from 'node:test';
 import {
   Redemption,
   RedemptionStatus,
-} from '../../src/Redemption/redemption.entity';
+} from '../../src/Redemption/entity/redemption.entity';
 import { ValidationError } from '../../src/domain/errors/validation.error';
 
 const FIXED_USER_ID = 'user-456';

@@ -1,5 +1,5 @@
-import { Contribution } from '../../domain/entities/contribution';
-import { Balance } from '../../domain/value-objects/balance';
+import { Contribution } from '../../domain/entities/contribution.entity';
+import { Balance } from '../../domain/value-objects/balance.vo';
 
 export class BalanceCalculator {
   public static calculate(contributions: Contribution[]): Balance {

@@ -8,7 +8,7 @@ import {
 import { ConsultBalanceUseCase } from '../../use-cases/consult-balance.usecase';
 import { ConsultBalanceDto } from '../../dto/consult-balance.dto';
 import { EmptyBalanceError } from '../../../domain/errors/empty-balance.error';
-import { Balance } from '../../../domain/value-objects/balance';
+import { Balance } from '../../../domain/value-objects/balance.vo';
 
 @Controller('v1/balance')
 export class BalanceController {

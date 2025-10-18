@@ -1,8 +1,8 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { BalanceCalculator } from '../../../src/Balance/services/balance-calculator';
-import { Contribution } from '../../../src/domain/entities/contribution';
-import { Balance } from '../../../src/domain/value-objects/balance';
+import { Contribution } from '../../../src/domain/entities/contribution.entity';
+import { Balance } from '../../../src/domain/value-objects/balance.vo';
 
 const FIXED_CONTRIBUTION_ID = 'b97c5043-069d-4de8-ae59-2baba1f159cf';
 

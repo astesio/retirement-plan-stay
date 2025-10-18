@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import assert from 'node:assert';
 import { afterEach, describe, it, mock } from 'node:test';
-import { Contribution } from '../../../src/domain/entities/contribution';
+import { Contribution } from '../../../src/domain/entities/contribution.entity';
 import { ValidationError } from '../../../src/domain/errors/validation.error';
 
 const FIXED_CONTRIBUTION_ID = 'b97c5043-069d-4de8-ae59-2baba1f159cf';
