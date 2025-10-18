@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { Injectable } from '@nestjs/common';
-import { Contribution } from '../../../../src/domain/entities/contribution';
-import { Redemption } from '../../../../src/Redemption/redemption.entity';
 import { IContributionRepository } from '../ports/contribution-repository.interface';
+import { Contribution } from '../../../domain/entities/contribution';
+import { Redemption } from '../../../Redemption/redemption.entity';
 
 const MOCKED_CONTRIBUTIONS: Contribution[] = [
   Contribution.create(
-    'user-chatbot-123',
+    '069c953b-7dc3-4916-bddd-bcacbdc9039b',
     200,
     new Date('2023-01-01'),
     new Date('2023-06-01'),
   ),
   Contribution.create(
-    'user-chatbot-123',
+    'b5fb8f8d-1cff-46b8-81f9-a63e09a67a60',
     100,
     new Date('2024-01-01'),
     new Date('2027-01-01'),
