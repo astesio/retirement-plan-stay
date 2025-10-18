@@ -4,6 +4,7 @@ import { afterEach, describe, it, mock } from 'node:test';
 import { Contribution } from '../../../src/domain/entities/contribution';
 import { ValidationError } from '../../../src/domain/errors/validation.error';
 
+const FIXED_CONTRIBUTION_ID = 'b97c5043-069d-4de8-ae59-2baba1f159cf';
 const FIXED_USER_ID = 'user-123';
 const FIXED_VALUE = 100.0;
 const FIXED_CONT_DATE = new Date('2024-01-01T00:00:00.000Z');
@@ -20,7 +21,7 @@ void describe('Contribution Class', () => {
   void describe('Static Factory: with()', () => {
     void it('should create a Contribution instance with the given ID and properties', () => {
       const contribution = Contribution.with(
-        'custom-id-999',
+        FIXED_CONTRIBUTION_ID,
         FIXED_USER_ID,
         FIXED_VALUE,
         FIXED_CONT_DATE,
@@ -32,6 +33,21 @@ void describe('Contribution Class', () => {
         true,
         'should be return an instance from Contribution',
       );
+    });
+
+    void it('should create an instance of Contribution and expose the values ​​via getters', () => {
+      const contribution = Contribution.with(
+        FIXED_CONTRIBUTION_ID,
+        FIXED_USER_ID,
+        FIXED_VALUE,
+        FIXED_CONT_DATE,
+        FIXED_VESTING_DATE,
+      );
+
+      assert.strictEqual(contribution instanceof Contribution, true);
+      assert.strictEqual(contribution.id, FIXED_CONTRIBUTION_ID);
+      assert.strictEqual(contribution.userId, FIXED_USER_ID);
+      assert.strictEqual(contribution.value, FIXED_VALUE);
     });
 
     void it('should throw ValidationError if ID is empty (constructor validation)', () => {
@@ -76,14 +92,14 @@ void describe('Contribution Class', () => {
     const vestingDatePast = new Date('2024-01-01T12:00:00.000Z');
 
     const contributionFuture = Contribution.with(
-      'id-1',
+      FIXED_CONTRIBUTION_ID,
       FIXED_USER_ID,
       FIXED_VALUE,
       FIXED_CONT_DATE,
       vestingDateAhead,
     );
     const contributionPast = Contribution.with(
-      'id-2',
+      FIXED_CONTRIBUTION_ID,
       FIXED_USER_ID,
       FIXED_VALUE,
       FIXED_CONT_DATE,

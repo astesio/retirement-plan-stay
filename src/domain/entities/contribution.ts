@@ -63,4 +63,8 @@ export class Contribution {
   public get userId(): string {
     return this.props.userId;
   }
+
+  public get value(): number {
+    return this.props.value;
+  }
 }
