@@ -61,6 +61,8 @@ npm run test:watch
 O projeto está estruturado em [MONOLITO MODULAR](https://medium.com/@abel.ncm/arquitetura-monol%C3%ADtica-modular-estrutura%C3%A7%C3%A3o-escal%C3%A1vel-do-projecto-8888ed51f53b).
 A arquitetura do projeto foi estruturada para ser robusta e evolutiva, focada na separação de preocupações.
 
+![retirement-plan-stay](assets/retirement-plan-stay.png)
+
 - `src/domain:` Contém as regras de negócio puras (Entidades, Objetos de Valor, Erros de Domínio). Não tem dependência de infraestrutura (frameworks, bancos de dados).
   - Ex: ContributionEntity, BalanceVO.
 
