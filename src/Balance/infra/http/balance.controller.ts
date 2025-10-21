@@ -1,45 +1,35 @@
-import {
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  Param,
-} from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ConsultBalanceUseCase } from '../../use-cases/consult-balance.usecase';
-import { ConsultBalanceDto } from '../../dto/consult-balance.dto';
-import { EmptyBalanceError } from '../../../domain/errors/empty-balance.error';
+import { ConsultBalanceDto } from '../../dto/request-consult-balance.dto';
 import { Balance } from '../../../domain/value-objects/balance.vo';
+import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiErrorDto } from '../../../common/dto/api-error.dto';
+import { BalanceResponseDto } from '../../dto/response-balance-response.dto';
 
+@ApiTags('Balance')
 @Controller('v1/balance')
 export class BalanceController {
   constructor(private readonly consultBalanceUseCase: ConsultBalanceUseCase) {}
 
   @Get(':userId')
-  async getBalance(@Param() params: ConsultBalanceDto) {
+  @ApiOkResponse({
+    description: 'Consulta de saldo bem-sucedida.',
+    type: BalanceResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Saldo Vazio ou dados inválidos.',
+    type: ApiErrorDto,
+  })
+  async getBalance(
+    @Param() params: ConsultBalanceDto,
+  ): Promise<BalanceResponseDto> {
     const result = await this.consultBalanceUseCase.execute({
       userId: params.userId,
     });
 
     if (result.isLeft()) {
-      const error = result.value;
-
-      if (error instanceof EmptyBalanceError) {
-        throw new HttpException(
-          {
-            message: error.message,
-            errorType: error.name,
-          },
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-
-      throw new HttpException(
-        {
-          message: 'Erro interno ao consultar saldo.',
-          error: error.name,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw result.value;
     }
 
     const balance: Balance = result.value;
@@ -47,6 +37,6 @@ export class BalanceController {
     return {
       ...balance,
       message: 'Saldo calculado com sucesso para o chatbot',
-    };
+    } as BalanceResponseDto;
   }
 }
