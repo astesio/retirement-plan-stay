@@ -17,21 +17,13 @@ export const USER_REPO_TOKEN = 'IUserRepository';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        console.log('ASTESIO');
-        console.log(configService.get<string>('POSTGRES_HOST'));
-        console.log(configService.get<string>('POSTGRES_USER'));
         return {
           type: 'postgres',
-          host: configService.get<string>('POSTGRES_HOST'),
-          port: configService.get<number>('POSTGRES_PORT'),
-          username: configService.get<string>('POSTGRES_USER'),
-          password: configService.get<string>('POSTGRES_PASSWORD'),
-          database: configService.get<string>('POSTGRES_DB'),
-          // host: configService.get<string>('DATABASE_HOST'),
-          // port: configService.get<number>('DATABASE_PORT'),
-          // username: configService.get<string>('DATABASE_USER'),
-          // password: configService.get<string>('DATABASE_PASSWORD'),
-          // database: configService.get<string>('DATABASE_NAME'),
+          host: configService.get<string>('DATABASE_HOST'),
+          port: configService.get<number>('DATABASE_PORT'),
+          username: configService.get<string>('DATABASE_USER'),
+          password: configService.get<string>('DATABASE_PASSWORD'),
+          database: configService.get<string>('DATABASE_NAME'),
           entities: [ContributionTypeOrmEntity, UserTypeOrmEntity],
           synchronize: true, // Apenas para DEV! Em PROD, usar o Migrations
         };
