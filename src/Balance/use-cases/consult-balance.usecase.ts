@@ -1,8 +1,10 @@
 import { Either, left, right } from '../../core/either';
 import { Usecase } from '../../core/usecase.interface';
 import { EmptyBalanceError } from '../../domain/errors/empty-balance.error';
+import { UserNotFoundError } from '../../domain/errors/user-not-found.error';
 import { Balance } from '../../domain/value-objects/balance.vo';
 import { IContributionRepository } from '../../infra/persistence/ports/contribution-repository.interface';
+import { IUserRepositoryInterface } from '../../infra/persistence/ports/user-repository.interface';
 import { BalanceCalculator } from '../services/balance-calculator';
 
 export type ConsultBalanceRequest = {
@@ -13,11 +15,20 @@ export type ConsultBalanceResponse = Either<Error, Balance>;
 export class ConsultBalanceUseCase
   implements Usecase<ConsultBalanceRequest, ConsultBalanceResponse>
 {
-  constructor(private contributionRepository: IContributionRepository) {}
+  constructor(
+    private contributionRepository: IContributionRepository,
+    private userRepository: IUserRepositoryInterface,
+  ) {}
 
   async execute({
     userId,
   }: ConsultBalanceRequest): Promise<ConsultBalanceResponse> {
+    const user = await this.userRepository.findById(userId);
+
+    if (!user) {
+      return left(new UserNotFoundError(userId));
+    }
+
     const contributions =
       await this.contributionRepository.findByUserId(userId);
 
