@@ -16,7 +16,7 @@ export class Contribution {
 
   private validate(): void {
     if (!this.props.id || this.props.id.trim() === '') {
-      throw new ValidationError('User Id cannot be empty.');
+      throw new ValidationError('Contribution Id cannot be empty.');
     }
   }
 
@@ -66,5 +66,13 @@ export class Contribution {
 
   public get value(): number {
     return this.props.value;
+  }
+
+  public get contributionDate(): Date {
+    return this.props.contributionDate;
+  }
+
+  public get vestingDate(): Date {
+    return this.props.vestingDate;
   }
 }
