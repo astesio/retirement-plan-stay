@@ -56,6 +56,26 @@ npm run test
 npm run test:watch
 ```
 
+#### Execução via Container
+
+Na raiz do projeto rode o comando
+
+```bash
+  docker-compose up -d
+```
+
+Para entrar no container
+
+- Ex: `docker exec -it nestjs_postgres_local psql -U dev_user -d nestjs_test_db`
+- \l: Lista os databases
+- \q: Sai do container do DB
+
+Para finalizar rode o comando
+
+```bash
+  docker-compose down
+```
+
 ## 🏗️ Modelagem e Arquitetura Proposta
 
 O projeto está estruturado em [MONOLITO MODULAR](https://medium.com/@abel.ncm/arquitetura-monol%C3%ADtica-modular-estrutura%C3%A7%C3%A3o-escal%C3%A1vel-do-projecto-8888ed51f53b).
