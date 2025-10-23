@@ -58,13 +58,35 @@ npm run test:watch
 
 #### Execução via Container
 
-Na raiz do projeto rode o comando
+Para rodar o projeto via docker-compose basta ir ate a raiz do projeto e executar o comando abaixo
 
 ```bash
   docker-compose up -d
 ```
 
-Para entrar no container
+Para visualiar os logs de forma estatica rode o comando
+
+```bash
+  docker ps # para pegar o id ou nome do container
+  docker logs id_do_container
+```
+
+Para acessar o container utilize o seguinte comando
+
+```bash
+  docker exec -it nestjs_api_local /bin/sh
+```
+
+#### Modo debug via container
+
+- Foi criado um script no `package.json` chamado `start:container:debug`
+- Foi aberta uma nova porta no `docker-compose.yml`
+  - `- "9229:9229"` na secao da `api`
+  - também foi alterado o comando
+    - `command: npm run start:container:debug # debug via vscode````
+- Foi criado um `.vscode/launch.json` para que se possa rodar a aplicação no modo de debug (Rode pelo vscode apos os container está de "PÉ")
+
+Para entrar no container postgress
 
 - Ex: `docker exec -it nestjs_postgres_local psql -U dev_user -d nestjs_test_db`
 - \l: Lista os databases
@@ -74,6 +96,12 @@ Para finalizar rode o comando
 
 ```bash
   docker-compose down
+```
+
+Caso queira subir novamente basta rodar
+
+```bash
+docker-compose up --build
 ```
 
 ## 🏗️ Modelagem e Arquitetura Proposta

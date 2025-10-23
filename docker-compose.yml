@@ -26,6 +26,7 @@ services:
     container_name: nestjs_api_local
     ports:
       - "3000:3000"
+      - "9229:9229" # debug port allowed
     env_file:
       - .env
     volumes:
@@ -33,7 +34,8 @@ services:
       - /app/node_modules
     depends_on:
       - postgres_db
-    command: npm run start:dev
+    # command: npm run start:dev
+    command: npm run start:container:debug # debug via vscode
 
 volumes:
   postgres_data:
