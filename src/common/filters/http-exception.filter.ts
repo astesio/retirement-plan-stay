@@ -7,6 +7,7 @@ import {
 import { Request, Response } from 'express';
 import { EmptyBalanceError } from '../../domain/errors/empty-balance.error';
 import { InsufficientBalanceError } from '../../domain/errors/insufficient-balance.error';
+import { UserNotFoundError } from '../../domain/errors/user-not-found.error';
 
 export class AllExceptionsFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
@@ -22,10 +23,18 @@ export class AllExceptionsFilter implements ExceptionFilter {
       exception instanceof EmptyBalanceError ||
       exception instanceof InsufficientBalanceError
     ) {
+      status = HttpStatus.NOT_FOUND;
+      message = exception.message;
+      errorType = exception.name;
+    }
+
+    if (exception instanceof UserNotFoundError) {
       status = HttpStatus.BAD_REQUEST;
       message = exception.message;
       errorType = exception.name;
-    } else if (exception instanceof HttpException) {
+    }
+
+    if (exception instanceof HttpException) {
       status = exception.getStatus();
       const resp = exception.getResponse();
 
