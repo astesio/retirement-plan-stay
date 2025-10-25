@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { ContributionTypeOrmEntity } from './contribution.typeorm.entity';
 
-@Entity('users')
+@Entity({ name: 'users' })
 export class UserTypeOrmEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -10,4 +11,10 @@ export class UserTypeOrmEntity {
 
   @Column({ unique: true })
   document: string;
+
+  @OneToMany(
+    () => ContributionTypeOrmEntity,
+    (contribution) => contribution.user,
+  )
+  contributions: ContributionTypeOrmEntity[];
 }

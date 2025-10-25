@@ -1,11 +1,11 @@
 import { Global, Module } from '@nestjs/common';
-// import { InMemoryContributionRepository } from './persistence/repositories/in-memory-contribution.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ContributionTypeOrmEntity } from './persistence/entities/contribution.typeorm.entity';
-import { PostgresContributionRepository } from './persistence/repositories/postgres-contribution.repository';
 import { UserTypeOrmEntity } from './persistence/entities/user.typeorm.entity';
+import { ContributionTypeOrmEntity } from './persistence/entities/contribution.typeorm.entity';
 import { PostgresUserRepository } from './persistence/repositories/postgres-user.repository';
+import { PostgresContributionRepository } from './persistence/repositories/postgres-contribution.repository';
+// import { InMemoryContributionRepository } from './persistence/repositories/in-memory-contribution.repository';
 
 export const CONTRIBUTION_REPO_TOKEN = 'IContributionRepository';
 export const USER_REPO_TOKEN = 'IUserRepository';
@@ -26,6 +26,7 @@ export const USER_REPO_TOKEN = 'IUserRepository';
           database: configService.get<string>('DATABASE_NAME'),
           entities: [ContributionTypeOrmEntity, UserTypeOrmEntity],
           synchronize: true, // Apenas para DEV! Em PROD, usar o Migrations
+          autoLoadEntities: true, // loggin true, para ver as queries geradas
         };
       },
     }),
