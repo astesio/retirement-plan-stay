@@ -28,6 +28,12 @@ export class InMemoryContributionRepository implements IContributionRepository {
     return this.contributions.filter((c) => c.userId === userId);
   }
 
+  async save(contribution: Contribution): Promise<Contribution> {
+    this.contributions.push(contribution);
+    return contribution;
+  }
+
+  // melhorar o saveRedemption, implemntar um caso mais real para o em memory
   async saveRedemption(redemption: Redemption): Promise<void> {
     this.redemptions.push(redemption);
     console.log(
