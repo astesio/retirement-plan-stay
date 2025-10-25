@@ -2,12 +2,12 @@
 import { deepStrictEqual, ok } from 'node:assert';
 import { describe, it } from 'node:test';
 import { Either, left, right } from '../../src/core/either';
-import { Usecase } from '../../src/core/usecase.interface';
+import { IUsecase } from '../../src/core/usecase.interface';
 
 type TestInput = { value: number };
 type TestOutput = Either<Error, string>;
 
-class TestUsecase implements Usecase<TestInput, TestOutput> {
+class TestUsecase implements IUsecase<TestInput, TestOutput> {
   async execute(input: TestInput): Promise<TestOutput> {
     if (input.value > 10) {
       return right<Error, string>('Success');

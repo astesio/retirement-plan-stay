@@ -1,5 +1,5 @@
 import { Either, left, right } from '../../core/either';
-import { Usecase } from '../../core/usecase.interface';
+import { IUsecase } from '../../core/usecase.interface';
 import { EmptyBalanceError } from '../../domain/errors/empty-balance.error';
 import { UserNotFoundError } from '../../domain/errors/user-not-found.error';
 import { Balance } from '../../domain/value-objects/balance.vo';
@@ -13,7 +13,7 @@ export type ConsultBalanceRequest = {
 export type ConsultBalanceResponse = Either<Error, Balance>;
 
 export class ConsultBalanceUseCase
-  implements Usecase<ConsultBalanceRequest, ConsultBalanceResponse>
+  implements IUsecase<ConsultBalanceRequest, ConsultBalanceResponse>
 {
   constructor(
     private contributionRepository: IContributionRepository,
