@@ -8,6 +8,7 @@ import { Request, Response } from 'express';
 import { EmptyBalanceError } from '../../domain/errors/empty-balance.error';
 import { InsufficientBalanceError } from '../../domain/errors/insufficient-balance.error';
 import { UserNotFoundError } from '../../domain/errors/user-not-found.error';
+import { UserAlreadyExistsError } from '../../domain/errors/user-already-exists.error';
 
 export class AllExceptionsFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
@@ -30,6 +31,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     if (exception instanceof UserNotFoundError) {
       status = HttpStatus.BAD_REQUEST;
+      message = exception.message;
+      errorType = exception.name;
+    }
+
+    if (exception instanceof UserAlreadyExistsError) {
+      status = HttpStatus.CONFLICT;
       message = exception.message;
       errorType = exception.name;
     }
