@@ -7,7 +7,7 @@ import {
   PersistenceModule,
   USER_REPO_TOKEN,
 } from '../infra/persistence.module';
-import { IUserRepositoryInterface } from '../infra/persistence/ports/user-repository.interface';
+import { IUserRepository } from '../infra/persistence/ports/user-repository.interface';
 
 @Module({
   imports: [PersistenceModule],
@@ -17,7 +17,7 @@ import { IUserRepositoryInterface } from '../infra/persistence/ports/user-reposi
       provide: ConsultBalanceUseCase,
       useFactory: (
         contributionRepo: IContributionRepository,
-        userRepo: IUserRepositoryInterface,
+        userRepo: IUserRepository,
       ) => new ConsultBalanceUseCase(contributionRepo, userRepo),
       inject: [CONTRIBUTION_REPO_TOKEN, USER_REPO_TOKEN],
     },

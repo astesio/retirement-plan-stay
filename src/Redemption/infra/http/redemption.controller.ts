@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Controller, Post, Body } from '@nestjs/common';
 
-import { RequestRedemptionDto } from '../../dto/request-redemption.dto';
 import {
-  RequestRedemptionRequest,
+  RequestRedemption,
   RequestRedemptionUseCase,
 } from '../../use-cases/request-redemption.usecase';
 import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiErrorDto } from '../../../common/dto/api-error.dto';
+import { RequestRedemptionDto } from '../../dto/request-redemption.dto';
 import { ResponseRedemptionDto } from '../../dto/response-redemption.dto';
 
 @ApiTags('Redemption')
@@ -33,7 +33,7 @@ export class RedemptionController {
   async requestRedemption(
     @Body() body: RequestRedemptionDto,
   ): Promise<ResponseRedemptionDto> {
-    const request: RequestRedemptionRequest = {
+    const request: RequestRedemption = {
       userId: body.userId,
       value: body.value,
     };

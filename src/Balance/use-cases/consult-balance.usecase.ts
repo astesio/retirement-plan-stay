@@ -4,7 +4,7 @@ import { EmptyBalanceError } from '../../domain/errors/empty-balance.error';
 import { UserNotFoundError } from '../../domain/errors/user-not-found.error';
 import { Balance } from '../../domain/value-objects/balance.vo';
 import { IContributionRepository } from '../../infra/persistence/ports/contribution-repository.interface';
-import { IUserRepositoryInterface } from '../../infra/persistence/ports/user-repository.interface';
+import { IUserRepository } from '../../infra/persistence/ports/user-repository.interface';
 import { BalanceCalculator } from '../services/balance-calculator';
 
 export type ConsultBalanceRequest = {
@@ -17,7 +17,7 @@ export class ConsultBalanceUseCase
 {
   constructor(
     private contributionRepository: IContributionRepository,
-    private userRepository: IUserRepositoryInterface,
+    private userRepository: IUserRepository,
   ) {}
 
   async execute({

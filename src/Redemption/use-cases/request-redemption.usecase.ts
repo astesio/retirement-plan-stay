@@ -5,29 +5,30 @@ import { UserNotFoundError } from '../../domain/errors/user-not-found.error';
 import { InsufficientBalanceError } from '../../domain/errors/insufficient-balance.error';
 import { IContributionRepository } from '../../infra/persistence/ports/contribution-repository.interface';
 import { ConsultBalanceUseCase } from '../../Balance/use-cases/consult-balance.usecase';
+import { IUsecase } from '../../core/usecase.interface';
 
 export class InvalidValueRedemptionError extends Error {}
 
-export type RequestRedemptionRequest = {
+export type RequestRedemption = {
   userId: string;
   // Se 'value' for undefined ou null, significa resgate TOTAL.
   value?: number;
 };
 
-type RequestRedemptionResponse = Either<
+type ResponseRedemption = Either<
   UserNotFoundError | InsufficientBalanceError | InvalidValueRedemptionError,
   Redemption
 >;
 
-export class RequestRedemptionUseCase {
+export class RequestRedemptionUseCase
+  implements IUsecase<RequestRedemption, ResponseRedemption>
+{
   constructor(
     private contributionRepository: IContributionRepository,
     private consultBalanceUseCase: ConsultBalanceUseCase,
   ) {}
 
-  async execute(
-    request: RequestRedemptionRequest,
-  ): Promise<RequestRedemptionResponse> {
+  async execute(request: RequestRedemption): Promise<ResponseRedemption> {
     const { userId, value } = request;
     const balanceResult = await this.consultBalanceUseCase.execute({ userId });
 
