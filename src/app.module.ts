@@ -4,6 +4,7 @@ import { BalanceModule } from './Balance/balance.module';
 import { RedemptionModule } from './Redemption/redemption.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './User/user.module';
+import { ContributionModule } from './Contribution/contribution.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { UserModule } from './User/user.module';
     PersistenceModule,
     BalanceModule,
     RedemptionModule,
+    ContributionModule,
     UserModule,
   ],
   controllers: [],

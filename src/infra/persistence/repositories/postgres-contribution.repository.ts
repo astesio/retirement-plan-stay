@@ -21,9 +21,11 @@ const toDomainEntity = (
 const toTypeOrmEntity = (
   domainEntity: Contribution,
 ): ContributionTypeOrmEntity => {
+  // todo: melhorar esse metodo
   const typeOrmEntity = new ContributionTypeOrmEntity();
   typeOrmEntity.id = domainEntity.id;
   typeOrmEntity.userId = domainEntity.userId;
+  typeOrmEntity.value = domainEntity.value;
   typeOrmEntity.contributionDate = domainEntity.contributionDate;
   typeOrmEntity.vestingDate = domainEntity.vestingDate;
 
@@ -50,14 +52,14 @@ export class PostgresContributionRepository implements IContributionRepository {
     return typeOrmContributions.map(toDomainEntity);
   }
 
-  // ver o saveRedemption contra o save
   async save(contribution: Contribution): Promise<Contribution> {
-    const typeOrmEntity = toTypeOrmEntity(contribution);
+    const typeOrmEntity = toTypeOrmEntity(contribution); // aplicar isRedeemed na entity
     const savedEntity = await this.repository.save(typeOrmEntity);
     return toDomainEntity(savedEntity);
   }
 
   saveRedemption(redemption: Redemption): Promise<void> {
+    // faltou implementar o resgate
     console.log(
       `[POSTGRES DB] Executando TRANSAÇÃO para resgate de ${redemption.value} do usuário ${redemption.userId}`,
     );
