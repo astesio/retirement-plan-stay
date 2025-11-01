@@ -7,6 +7,11 @@ export type UserProps = {
   document: string;
 };
 
+export type CreateUserProps = {
+  name: string;
+  document: string;
+};
+
 export class User {
   private constructor(private props: UserProps) {
     this.validate();
@@ -18,15 +23,15 @@ export class User {
     }
   }
 
-  public static create(name: string, document: string): User {
+  public static create({ name, document }: CreateUserProps): User {
     return new User({
       id: crypto.randomUUID(),
-      name: name,
-      document: document,
+      name,
+      document,
     });
   }
 
-  public static with(id: string, name: string, document: string): User {
+  public static with({ id, name, document }: UserProps): User {
     return new User({
       id,
       name,

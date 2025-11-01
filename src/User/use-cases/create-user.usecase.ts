@@ -12,11 +12,13 @@ export class CreateUserUseCase implements IUsecase<RequestUser, ResponseUser> {
 
   async execute({ name, document }: RequestUser): Promise<ResponseUser> {
     const existingUser = await this.userRepository.findByDocument(document);
+
     if (existingUser) {
       return left(new UserAlreadyExistsError(document));
     }
 
-    const newUser = User.create(name, document);
+    const newUser = User.create({ name, document });
+
     const savedUser = await this.userRepository.save(newUser);
     return right(savedUser);
   }

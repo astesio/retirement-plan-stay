@@ -1,16 +1,17 @@
+// todo: for organizatino imports
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IUserRepository } from '../ports/user-repository.interface';
-import { User } from 'src/domain/entities/user.entity';
+import { User } from '../../../domain/entities/user.entity';
 import { UserTypeOrmEntity } from '../entities/user.typeorm.entity';
 
 const toDomainEntity = (typeOrmEntity: UserTypeOrmEntity): User => {
-  return User.with(
-    typeOrmEntity.id,
-    typeOrmEntity.name,
-    typeOrmEntity.document,
-  );
+  return User.with({
+    id: typeOrmEntity.id,
+    name: typeOrmEntity.name,
+    document: typeOrmEntity.document,
+  });
 };
 
 const toTypeOrmEntity = (domainEntity: User): UserTypeOrmEntity => {
@@ -23,7 +24,7 @@ const toTypeOrmEntity = (domainEntity: User): UserTypeOrmEntity => {
   return typeOrmEntity;
 };
 
-@Injectable()
+@Injectable() // todo: find some way to inject module without decorator
 export class PostgresUserRepository implements IUserRepository {
   constructor(
     @InjectRepository(UserTypeOrmEntity)
@@ -42,13 +43,17 @@ export class PostgresUserRepository implements IUserRepository {
 
   async findByDocument(document: string): Promise<User | null> {
     const typeOrmUser = await this.repository.findOneBy({ document });
-    return typeOrmUser ? toDomainEntity(typeOrmUser) : null;
+
+    if (!typeOrmUser) {
+      return null;
+    }
+
+    return toDomainEntity(typeOrmUser);
   }
 
   async save(user: User): Promise<User> {
     const typeOrmEntity = toTypeOrmEntity(user);
     const savedEntity = await this.repository.save(typeOrmEntity);
-
     return toDomainEntity(savedEntity);
   }
 }
