@@ -2,7 +2,7 @@ import { Either, left, right } from '../../core/either';
 import { IUsecase } from '../../core/usecase.interface';
 import { EmptyBalanceError } from '../../domain/errors/empty-balance.error';
 import { UserNotFoundError } from '../../domain/errors/user-not-found.error';
-import { Balance } from '../../domain/value-objects/balance.vo';
+import { BalanceVO } from '../../domain/value-objects/balance.vo';
 import { IContributionRepository } from '../../infra/persistence/ports/contribution-repository.interface';
 import { IUserRepository } from '../../infra/persistence/ports/user-repository.interface';
 import { BalanceCalculator } from '../services/balance-calculator';
@@ -10,7 +10,7 @@ import { BalanceCalculator } from '../services/balance-calculator';
 export type ConsultBalanceRequest = {
   userId: string;
 };
-export type ConsultBalanceResponse = Either<Error, Balance>;
+export type ConsultBalanceResponse = Either<Error, BalanceVO>;
 
 export class ConsultBalanceUseCase
   implements IUsecase<ConsultBalanceRequest, ConsultBalanceResponse>
@@ -23,6 +23,7 @@ export class ConsultBalanceUseCase
   async execute({
     userId,
   }: ConsultBalanceRequest): Promise<ConsultBalanceResponse> {
+    //todo:  duplicaçao de regra de negocio todo use case tem que fazer essa buscar ver como melhoar isso
     const user = await this.userRepository.findById(userId);
 
     if (!user) {

@@ -1,13 +1,13 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { Balance } from '../../../src/domain/value-objects/balance.vo';
+import { BalanceVO } from '../../../src/domain/value-objects/balance.vo';
 
 void describe('Balance Class (Value Object)', () => {
   const totalValue = 1500.75;
   const availableValue = 500.25;
 
   void it('should store the values ​​of total and availableForRedemption correctly in the constructor', () => {
-    const balance = new Balance(totalValue, availableValue);
+    const balance = new BalanceVO(totalValue, availableValue);
 
     const jsonOutput = balance.toJSON();
 
@@ -16,7 +16,7 @@ void describe('Balance Class (Value Object)', () => {
   });
 
   void it('should format the object to JSON correctly using the toJSON() method', () => {
-    const balance = new Balance(totalValue, availableValue);
+    const balance = new BalanceVO(totalValue, availableValue);
 
     const expectedJson = {
       total: 1500.75,
@@ -29,7 +29,7 @@ void describe('Balance Class (Value Object)', () => {
   });
 
   void it('should correctly handle zero values', () => {
-    const balance = new Balance(0, 0);
+    const balance = new BalanceVO(0, 0);
 
     const expectedJson = {
       total: 0,

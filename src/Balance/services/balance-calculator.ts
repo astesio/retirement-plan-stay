@@ -1,18 +1,21 @@
 import { Contribution } from '../../domain/entities/contribution.entity';
-import { Balance } from '../../domain/value-objects/balance.vo';
+import { BalanceVO } from '../../domain/value-objects/balance.vo';
 
 export class BalanceCalculator {
-  public static calculate(contributions: Contribution[]): Balance {
+  public static calculate(contributions: Contribution[]): BalanceVO {
     const currentDate = new Date();
     let total = 0;
     let availableForRedemption = 0;
 
     for (const contribution of contributions) {
-      total += contribution.value;
+      //todo: encontrar a melhor maneira possivel para lidar com valores monetarios, esta vindo como string do banco
+      total += Number(contribution.value);
+
       if (contribution.isAvailableForRedemption(currentDate)) {
-        availableForRedemption += contribution.value;
+        //todo: encontrar a melhor maneira possivel para lidar com valores monetarios, esta vindo como string do banco
+        availableForRedemption += Number(contribution.value);
       }
     }
-    return new Balance(total, availableForRedemption);
+    return new BalanceVO(total, availableForRedemption);
   }
 }

@@ -1,4 +1,4 @@
-export class Balance {
+export class BalanceVO {
   private readonly total: number;
   private readonly availableForRedemption: number;
 

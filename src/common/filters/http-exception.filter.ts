@@ -20,6 +20,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     let message: string = 'Ocorreu um erro interno no servidor.';
     let errorType = 'InternalServerError';
 
+    console.error(exception);
+
     if (
       exception instanceof EmptyBalanceError ||
       exception instanceof InsufficientBalanceError

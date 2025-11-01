@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ConsultBalanceUseCase } from '../../use-cases/consult-balance.usecase';
 import { ConsultBalanceDto } from '../../dto/request-consult-balance.dto';
-import { Balance } from '../../../domain/value-objects/balance.vo';
+import { BalanceVO } from '../../../domain/value-objects/balance.vo';
 import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiErrorDto } from '../../../common/dto/api-error.dto';
 import { BalanceResponseDto } from '../../dto/response-balance-response.dto';
@@ -32,7 +32,7 @@ export class BalanceController {
       throw result.value;
     }
 
-    const balance: Balance = result.value;
+    const balance: BalanceVO = result.value;
 
     return {
       ...balance,

@@ -2,7 +2,7 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { BalanceCalculator } from '../../../src/Balance/services/balance-calculator';
 import { Contribution } from '../../../src/domain/entities/contribution.entity';
-import { Balance } from '../../../src/domain/value-objects/balance.vo';
+import { BalanceVO } from '../../../src/domain/value-objects/balance.vo';
 
 const FIXED_CONTRIBUTION_ID = 'b97c5043-069d-4de8-ae59-2baba1f159cf';
 
@@ -15,7 +15,7 @@ void describe('BalanceCalculator.calculate()', () => {
 
     assert.strictEqual(resultJOSN.total, 0);
     assert.strictEqual(resultJOSN.availableForRedemption, 0);
-    assert.strictEqual(result instanceof Balance, true);
+    assert.strictEqual(result instanceof BalanceVO, true);
   });
 
   void it('should correctly calculate the total and the available amount (all available)', () => {
@@ -23,12 +23,14 @@ void describe('BalanceCalculator.calculate()', () => {
       Contribution.create(
         FIXED_CONTRIBUTION_ID,
         100,
+        0,
         new Date('2024-01-01T00:00:00.000Z'),
         new Date('2024-01-01T00:00:00.000Z'),
       ),
       Contribution.create(
         FIXED_CONTRIBUTION_ID,
         200,
+        0,
         new Date('2024-12-31T23:59:59.000Z'),
         new Date('2024-12-31T23:59:59.000Z'),
       ),
@@ -48,18 +50,21 @@ void describe('BalanceCalculator.calculate()', () => {
       Contribution.create(
         FIXED_CONTRIBUTION_ID,
         50,
+        0,
         new Date('2025-04-30T10:00:00.000Z'),
         new Date('2025-04-30T10:00:00.000Z'),
       ),
       Contribution.create(
         FIXED_CONTRIBUTION_ID,
         25,
+        0,
         new Date('2025-04-30T10:00:00.000Z'),
         new Date('2024-04-30T10:00:00.000Z'),
       ),
       Contribution.create(
         FIXED_CONTRIBUTION_ID,
         100,
+        0,
         new Date('2025-04-30T10:00:00.000Z'),
         new Date('2026-04-30T10:00:00.000Z'),
       ),
