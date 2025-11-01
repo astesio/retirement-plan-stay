@@ -30,6 +30,17 @@ services:
       retries: 5
       start_period: 10s
 
+  # pgadmin:
+  #   image: dpage/pgadmin4:latest
+  #   container_name: my_pgadmin
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: astesiojose@gmail.com
+  #     PGADMIN_DEFAULT_PASSWORD: pgadmin_password
+  #   ports:
+  #     - "8080:80" # Access pgAdmin via http://localhost:8080
+  #   depends_on:
+  #     - postgres_db
+
   # ------------------------------------------------------------------
   # 2. Serviço da Aplicação NestJS (api) - Modo Desenvolvimento
   # ------------------------------------------------------------------
