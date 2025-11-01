@@ -51,6 +51,11 @@ export class PostgresUserRepository implements IUserRepository {
     return toDomainEntity(typeOrmUser);
   }
 
+  async findAllUsers(): Promise<User[] | null> {
+    const typeOrmUsers = await this.repository.find();
+    return typeOrmUsers.map(toDomainEntity);
+  }
+
   async save(user: User): Promise<User> {
     const typeOrmEntity = toTypeOrmEntity(user);
     const savedEntity = await this.repository.save(typeOrmEntity);
