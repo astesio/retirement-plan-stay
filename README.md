@@ -88,7 +88,7 @@ Para acessar o container utilize o seguinte comando
 
 Para entrar no container postgress
 
-- Ex: `docker exec -it nestjs_postgres_local psql -U dev_user -d nestjs_test_db`
+- Ex: `docker exec -it nestjs_postgres_local psql -U dev_user -d retirement_plan_stay_database`
 - \l: Lista os databases
 - \q: Sai do container do DB
 

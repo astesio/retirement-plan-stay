@@ -9,11 +9,26 @@ services:
     container_name: nestjs_postgres_local
     env_file:
       - .env
+    # environment:
+    #   POSTGRES_HOST: postgres_db
+    #   POSTGRES_PORT: 5432
+    #   POSTGRES_USER: dev_user
+    #   POSTGRES_PASSWORD: dev_password
+    #   POSTGRES_NAME: retirement_plan_stay_database
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./scripts/01-create-database.sql:/docker-entrypoint-initdb.d/01-create-database.sql
     restart: always
+
+    healthcheck:
+      test:
+        ["CMD-SHELL", "pg_isready -U dev_user -d retirement_plan_stay_database"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   # ------------------------------------------------------------------
   # 2. Serviço da Aplicação NestJS (api) - Modo Desenvolvimento
@@ -33,9 +48,10 @@ services:
       - .:/app
       - /app/node_modules
     depends_on:
-      - postgres_db
-    # command: npm run start:dev
-    command: npm run start:container:debug # debug via vscode
+      postgres_db:
+        condition: service_healthy
+    command: npm run start:dev
+    # command: npm run start:container:debug # debug via vscode
 
 volumes:
   postgres_data:
