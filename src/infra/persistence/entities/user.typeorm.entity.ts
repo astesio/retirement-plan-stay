@@ -15,6 +15,7 @@ export class UserTypeOrmEntity {
   @OneToMany(
     () => ContributionTypeOrmEntity,
     (contribution) => contribution.user,
+    { eager: true },
   )
   contributions: ContributionTypeOrmEntity[];
 }

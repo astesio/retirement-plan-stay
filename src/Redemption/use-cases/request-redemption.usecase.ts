@@ -6,6 +6,9 @@ import { InsufficientBalanceError } from '../../domain/errors/insufficient-balan
 import { IContributionRepository } from '../../infra/persistence/ports/contribution-repository.interface';
 import { ConsultBalanceUseCase } from '../../Balance/use-cases/consult-balance.usecase';
 import { IUsecase } from '../../core/usecase.interface';
+import { IUserRepository } from '../../infra/persistence/ports/user-repository.interface';
+import { BalanceVO } from '../../domain/value-objects/balance.vo';
+import { ConsumedContribution } from '../../domain/entities/contribution.entity';
 
 export class InvalidValueRedemptionError extends Error {}
 
@@ -25,27 +28,34 @@ export class RequestRedemptionUseCase
 {
   constructor(
     private contributionRepository: IContributionRepository,
+    private userRepository: IUserRepository,
     private consultBalanceUseCase: ConsultBalanceUseCase,
   ) {}
 
   async execute(request: RequestRedemption): Promise<ResponseRedemption> {
     const { userId, value } = request;
+    let requestedValue = value;
+
+    // duplicacao de codigo ver se existe algo para se fazer aqui
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      return left(new UserNotFoundError(userId));
+    }
+
     const balanceResult = await this.consultBalanceUseCase.execute({ userId });
-
     if (balanceResult.isLeft()) {
-      return left(balanceResult.value);
+      throw balanceResult.value;
     }
 
-    const balance = balanceResult.value;
-    const balanceToJSON = balance.toJSON();
-    const available = balanceToJSON.availableForRedemption;
+    const balanceToParse: BalanceVO = balanceResult.value;
+    const balance = balanceToParse.toJSON();
+    const balanceAvailable = balance.availableForRedemption;
 
-    let redemptionValue = value;
-    if (redemptionValue === undefined || redemptionValue === null) {
-      redemptionValue = available;
+    if (requestedValue === undefined || requestedValue === null) {
+      requestedValue = balanceAvailable;
     }
 
-    if (redemptionValue <= 0) {
+    if (requestedValue <= 0) {
       return left(
         new InvalidValueRedemptionError(
           'O valor de resgate deve ser positivo.',
@@ -53,13 +63,52 @@ export class RequestRedemptionUseCase
       );
     }
 
-    if (redemptionValue > available) {
-      return left(new InsufficientBalanceError(redemptionValue, available));
+    if (requestedValue > balanceAvailable) {
+      return left(
+        new InsufficientBalanceError(requestedValue, balanceAvailable),
+      );
     }
 
-    const redemption = Redemption.create(userId, redemptionValue);
+    const availabeContributions =
+      await this.contributionRepository.findAvailableByUserId(userId);
 
-    await this.contributionRepository.saveRedemption(redemption);
+    if (availabeContributions.length === 0) {
+      // melhrlar esse error depois com a ajuda da IA
+      throw new Error('Não foi encontraro contribuiçoes para resgate');
+    }
+
+    const contributionsToUpdate: ConsumedContribution[] = [];
+    let remainingValueToConsume = requestedValue;
+
+    for (const contribution of availabeContributions) {
+      if (requestedValue <= 0) {
+        break;
+      }
+
+      const availabeInContribution =
+        contribution.value - contribution.redeemedValue;
+
+      const consumeAmount = Math.min(
+        availabeInContribution,
+        remainingValueToConsume,
+      );
+
+      if (consumeAmount > 0) {
+        contributionsToUpdate.push({
+          id: contribution.id,
+          consumedValue: consumeAmount,
+        });
+        remainingValueToConsume -= consumeAmount;
+      }
+    }
+
+    const redemption = Redemption.create(userId, requestedValue);
+
+    await this.contributionRepository.saveRedemption(
+      redemption,
+      contributionsToUpdate,
+    );
+
     return right(redemption);
   }
 }

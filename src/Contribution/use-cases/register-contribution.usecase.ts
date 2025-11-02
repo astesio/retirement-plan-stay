@@ -1,5 +1,3 @@
-import { Injectable } from '@nestjs/common';
-import { v4 as uuid } from 'uuid';
 import { Either, left, right } from '../../core/either';
 import { Contribution } from '../../domain/entities/contribution.entity';
 import { UserNotFoundError } from '../../domain/errors/user-not-found.error';
@@ -12,11 +10,11 @@ type ContributionRequest = { userId: string; value: number; vestingDate: Date };
 type Error = UserNotFoundError | InvalidContributionValueError;
 type ContributionResponse = Either<Error, Contribution>;
 
-@Injectable()
 export class RegisterContributionUseCase
   implements IUsecase<ContributionRequest, ContributionResponse>
 {
   constructor(
+    // todo: entender porque o TS esta obrigado a passar dessa forma contributionRepositoryInterface.IContributionRepository,
     private readonly contributionRepository: contributionRepositoryInterface.IContributionRepository,
     private readonly userRepository: IUserRepository,
   ) {}
@@ -39,11 +37,10 @@ export class RegisterContributionUseCase
     const contribution = Contribution.create(
       userId,
       value,
+      0, // redeemedValue
       new Date(),
       vestingDate,
     );
-
-    console.log('astrsio use case ', contribution);
 
     const savedContribution =
       await this.contributionRepository.save(contribution);

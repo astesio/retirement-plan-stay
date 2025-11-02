@@ -24,6 +24,7 @@ void describe('Contribution Class', () => {
         FIXED_CONTRIBUTION_ID,
         FIXED_USER_ID,
         FIXED_VALUE,
+        0,
         FIXED_CONT_DATE,
         FIXED_VESTING_DATE,
       );
@@ -40,6 +41,7 @@ void describe('Contribution Class', () => {
         FIXED_CONTRIBUTION_ID,
         FIXED_USER_ID,
         FIXED_VALUE,
+        0,
         FIXED_CONT_DATE,
         FIXED_VESTING_DATE,
       );
@@ -59,6 +61,7 @@ void describe('Contribution Class', () => {
             emptyId,
             FIXED_USER_ID,
             FIXED_VALUE,
+            0,
             FIXED_CONT_DATE,
             FIXED_VESTING_DATE,
           );
@@ -74,6 +77,7 @@ void describe('Contribution Class', () => {
       const contribution = Contribution.create(
         FIXED_USER_ID,
         FIXED_VALUE,
+        0,
         FIXED_CONT_DATE,
         FIXED_VESTING_DATE,
       );
@@ -95,6 +99,7 @@ void describe('Contribution Class', () => {
       FIXED_CONTRIBUTION_ID,
       FIXED_USER_ID,
       FIXED_VALUE,
+      0,
       FIXED_CONT_DATE,
       vestingDateAhead,
     );
@@ -102,6 +107,7 @@ void describe('Contribution Class', () => {
       FIXED_CONTRIBUTION_ID,
       FIXED_USER_ID,
       FIXED_VALUE,
+      0,
       FIXED_CONT_DATE,
       vestingDatePast,
     );

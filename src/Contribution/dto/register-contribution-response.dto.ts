@@ -21,6 +21,12 @@ export class ContributionResponseDto {
   value: number;
 
   @ApiProperty({
+    description: 'O valor restante disponivel para ser sacado da contribuição.',
+    example: 7000.0,
+  })
+  redeemedValue: number;
+
+  @ApiProperty({
     description: 'O status atual do pedido de resgate.',
     example: '2025-10-15',
   })

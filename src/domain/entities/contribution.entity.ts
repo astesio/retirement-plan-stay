@@ -5,8 +5,14 @@ export type ContributionProps = {
   id: string;
   userId: string;
   value: number;
+  redeemedValue: number;
   contributionDate: Date;
   vestingDate: Date; // a data em que o valor estará disponivel para resgate
+};
+
+export type ConsumedContribution = {
+  id: string;
+  consumedValue: number;
 };
 
 export class Contribution {
@@ -20,25 +26,32 @@ export class Contribution {
     }
   }
 
+  // todo: FAZER PARA TODAS AS ENTITIES mudar a forma de se fazer o contrutor para parametros nomeados,
+  // mais claro a leitura do que passar os valores diretamente, ALEM DE NAO PRECISAR PASSAR NA MESMA ORDEM
   public static create(
     userId: string,
     value: number,
+    redeemedValue: number,
     contributionDate: Date,
     vestingDate: Date,
   ): Contribution {
     return new Contribution({
       id: crypto.randomUUID(),
-      userId: userId,
-      value: value,
-      contributionDate: contributionDate,
-      vestingDate: vestingDate,
+      userId,
+      value,
+      redeemedValue,
+      contributionDate,
+      vestingDate,
     });
   }
 
+  // todo: FAZER PARA TODAS AS ENTITIES mudar a forma de se fazer o contrutor para parametros nomeados,
+  // mais claro a leitura do que passar os valores diretamente, ALEM DE NAO PRECISAR PASSAR NA MESMA ORDEM
   public static with(
     id: string,
     userId: string,
     value: number,
+    redeemedValue: number,
     contributionDate: Date,
     vestingDate: Date,
   ): Contribution {
@@ -46,13 +59,14 @@ export class Contribution {
       id,
       userId,
       value,
+      redeemedValue,
       contributionDate,
       vestingDate,
     });
   }
 
   isAvailableForRedemption(currentDate: Date = new Date()): boolean {
-    // em PRD poderia ter um V.O para Data verificando o formato data como o fuso horario (UTC)
+    // FAZER UM VALUE OBJECT SO PARA DATA verificando o formato data como o fuso horario (UTC)
     return currentDate >= this.props.vestingDate;
   }
 
@@ -66,6 +80,10 @@ export class Contribution {
 
   public get value(): number {
     return this.props.value;
+  }
+
+  public get redeemedValue(): number {
+    return this.props.redeemedValue;
   }
 
   public get contributionDate(): Date {

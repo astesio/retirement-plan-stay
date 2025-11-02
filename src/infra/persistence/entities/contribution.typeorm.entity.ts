@@ -20,6 +20,15 @@ export class ContributionTypeOrmEntity {
   @Column({ type: 'numeric', precision: 10, scale: 2 })
   value: number;
 
+  @Column({
+    name: 'redeemed_value',
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    default: 0.0,
+  })
+  redeemedValue: number;
+
   @Column({ type: 'timestamp with time zone', name: 'contribution_date' })
   contributionDate: Date;
 

@@ -1,0 +1,2 @@
+pensar no modulo de conta, 
+uma vez que o usuario pode ter mais de uma conta e tipo de plano PGBL, VGBL 

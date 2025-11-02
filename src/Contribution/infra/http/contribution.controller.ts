@@ -28,6 +28,7 @@ export class ContributionController {
       id: contribution.id,
       userId: contribution.userId,
       value: contribution.value,
+      redeemedValue: contribution.redeemedValue,
       contributionDate: contribution.contributionDate,
       vestingDate: contribution.vestingDate,
     };

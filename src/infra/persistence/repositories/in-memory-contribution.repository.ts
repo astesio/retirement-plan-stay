@@ -8,12 +8,14 @@ const MOCKED_CONTRIBUTIONS: Contribution[] = [
   Contribution.create(
     '069c953b-7dc3-4916-bddd-bcacbdc9039b',
     200,
+    0,
     new Date('2023-01-01'),
     new Date('2023-06-01'),
   ),
   Contribution.create(
     'b5fb8f8d-1cff-46b8-81f9-a63e09a67a60',
     100,
+    0,
     new Date('2024-01-01'),
     new Date('2027-01-01'),
   ),
@@ -21,6 +23,9 @@ const MOCKED_CONTRIBUTIONS: Contribution[] = [
 
 @Injectable()
 export class InMemoryContributionRepository implements IContributionRepository {
+  findAvailableByUserId(userId: string): Promise<Contribution[]> {
+    throw new Error('Method not implemented.');
+  }
   private contributions: Contribution[] = MOCKED_CONTRIBUTIONS;
   private redemptions: Redemption[] = [];
 
