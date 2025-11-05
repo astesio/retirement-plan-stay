@@ -1,0 +1,112 @@
+name: CI/CD - Deploy AWS ECS Fargate
+
+on:
+  push:
+    branches:
+      - main # Executa sempre que houver um push na branch main
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  ECR_REPOSITORY: seu-nome-do-repositorio-ecr # Deve ser o mesmo nome do Terraform
+  ECS_CLUSTER: ${{ needs.deploy_infra.outputs.ecs_cluster_name }}
+  ECS_SERVICE: ${{ needs.deploy_infra.outputs.ecs_service_name }}
+
+jobs:
+  # ==================================
+  # 1. CI - Build e Testes Unitários
+  # ==================================
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run Unit Tests (Teste Nativo Node.js/Jest)
+        # Assumindo que você usa o runner de teste do Node:
+        run: yarn test:unit # ou node --test
+        # Se for NestJS com Jest: run: yarn test
+
+  # ==================================
+  # 2. CD - Deploy de Infraestrutura (Terraform)
+  # ==================================
+  deploy_infra:
+    needs: ci # Só roda se o CI for bem-sucedido
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./infra # Navega para a pasta da infra
+
+      - name: Terraform Apply
+        # Em produção, você usaria um 'plan' e um 'apply' separado
+        run: terraform apply -auto-approve -var="project_name=previdencia-chatbot"
+        working-directory: ./infra
+
+    outputs:
+      ecs_cluster_name: ${{ steps.terraform_apply.outputs.ecs_cluster_name }}
+      ecs_service_name: ${{ steps.terraform_apply.outputs.ecs_service_name }}
+      ecr_repository_url: ${{ steps.terraform_apply.outputs.ecr_repository_url }}
+
+  # ==================================
+  # 3. CD - Deploy da Aplicação (Docker e ECS)
+  # ==================================
+  deploy_app:
+    needs: deploy_infra # Só roda após a infra estar pronta
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and Push Docker image
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }} # Tag com o hash do commit
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Deploy Amazon ECS Service
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ needs.deploy_infra.outputs.ecs_task_definition_arn }} # ARNs gerados no Terraform
+          service: ${{ needs.deploy_infra.outputs.ecs_service_name }}
+          cluster: ${{ needs.deploy_infra.outputs.ecs_cluster_name }}
+          # Substitui a imagem no Task Definition pela recém-criada
+          container-name: nestjs-api-container # Nome do container definido no Task Definition do Terraform
+          image: ${{ steps.build-image.outputs.image }}

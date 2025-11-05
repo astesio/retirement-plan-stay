@@ -109,7 +109,11 @@ docker-compose up --build
 O projeto está estruturado em [MONOLITO MODULAR](https://medium.com/@abel.ncm/arquitetura-monol%C3%ADtica-modular-estrutura%C3%A7%C3%A3o-escal%C3%A1vel-do-projecto-8888ed51f53b).
 A arquitetura do projeto foi estruturada para ser robusta e evolutiva, focada na separação de preocupações.
 
-![retirement-plan-stay](assets/retirement-plan-stay.png)
+![retirement-plan-stay](assets/01-modular-monolith.png)
+
+Arquitetura inspirada em **_Domain-Driven Design (DDD)_**, **_Clean Architecture_** e **_Port and Adapters_**
+
+![retirement-plan-stay](assets/02-retirement-plan-stay.png)
 
 - `src/domain:` Contém as regras de negócio puras (Entidades, Objetos de Valor, Erros de Domínio). Não tem dependência de infraestrutura (frameworks, bancos de dados).
   - Ex: ContributionEntity, BalanceVO.
@@ -216,3 +220,9 @@ A arquitetura do projeto foi estruturada para ser robusta e evolutiva, focada na
 #### 🔗 Endpoints da API
 
 Os endpoints podem ser consultados no endereço do [Swagger](http://localhost:3000/api)
+
+#### Artigos para leitura
+
+- [Arquitetura Monolítica Modular: Organização Modular de Pastas](https://medium.com/@abel.ncm/arquitetura-monol%C3%ADtica-modular-estrutura%C3%A7%C3%A3o-escal%C3%A1vel-do-projecto-8888ed51f53b)
+- [Arquitetura Clean Hexagonal: Caso Prático](https://medium.com/@abel.ncm/componentes-do-software-empresarial-caso-pr%C3%A1tico-f8e7bf15666e)
+- [Arquiteturas Emergentes Que Você Precisa Conhecer: Package by Feature, Vertical Slice e Modular](https://www.techleads.club/c/blog/quando-usar-arquiteturas-emergentes-package-by-feature-vertical-slice-e-modularizacao)
